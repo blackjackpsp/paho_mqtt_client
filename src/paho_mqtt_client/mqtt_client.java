@@ -1,5 +1,7 @@
 package paho_mqtt_client;
 
+import org.eclipse.paho.client.mqttv3.IMqttDeliveryToken;
+import org.eclipse.paho.client.mqttv3.MqttCallback;
 import org.eclipse.paho.client.mqttv3.MqttClient;
 import org.eclipse.paho.client.mqttv3.MqttConnectOptions;
 import org.eclipse.paho.client.mqttv3.MqttException;
@@ -7,7 +9,7 @@ import org.eclipse.paho.client.mqttv3.MqttMessage;
 import org.eclipse.paho.client.mqttv3.persist.MemoryPersistence;
 
 
-public class mqtt_client {
+public class mqtt_client implements MqttCallback  {
 	
 	mqtt_client(){
 		
@@ -29,14 +31,16 @@ public class mqtt_client {
             System.out.println("Connecting to broker: "+broker);
             sampleClient.connect(connOpts);
             System.out.println("Connected");
+            sampleClient.setCallback(this);
             System.out.println("Publishing message: "+content);
             MqttMessage message = new MqttMessage(content.getBytes());
             message.setQos(qos);
+            sampleClient.subscribe("hello/world");
             sampleClient.publish(topic, message);
             System.out.println("Message published");
-            sampleClient.disconnect();
-            System.out.println("Disconnected");
-            System.exit(0);
+            //sampleClient.disconnect();
+            //System.out.println("Disconnected");
+            //System.exit(0);
         } catch(MqttException me) {
             System.out.println("reason "+me.getReasonCode());
             System.out.println("msg "+me.getMessage());
@@ -46,5 +50,25 @@ public class mqtt_client {
             me.printStackTrace();
         }
 	}
+	
+	
+	@Override
+	public void connectionLost(Throwable cause) {
+	    // TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void messageArrived(String topic, MqttMessage message)
+	        throws Exception {
+	 System.out.println(message);   
+	}
+
+	@Override
+	public void deliveryComplete(IMqttDeliveryToken token) {
+	    // TODO Auto-generated method stub
+
+	}
+
 
 }
