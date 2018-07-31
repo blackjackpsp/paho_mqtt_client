@@ -1,7 +1,7 @@
 package paho_mqtt_client;
 
 public class principale {
-
+//Must add usage
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 		String topic        = args[0];
