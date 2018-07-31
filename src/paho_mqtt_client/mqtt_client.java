@@ -11,8 +11,14 @@ import org.eclipse.paho.client.mqttv3.persist.MemoryPersistence;
 
 public class mqtt_client implements MqttCallback  {
 	
+	public MqttClient sampleClient;
+	
 	mqtt_client(){
 		
+	}
+	
+	public MqttClient getMqttClient() {
+		return this.sampleClient;
 	}
 	
 	
@@ -25,18 +31,18 @@ public class mqtt_client implements MqttCallback  {
         MemoryPersistence persistence = new MemoryPersistence();
 
         try {
-            MqttClient sampleClient = new MqttClient(broker, clientId, persistence);
+            this.sampleClient = new MqttClient(broker, clientId, persistence);
             MqttConnectOptions connOpts = new MqttConnectOptions();
             connOpts.setCleanSession(true);
             System.out.println("Connecting to broker: "+broker);
-            sampleClient.connect(connOpts);
+            this.sampleClient.connect(connOpts);
             System.out.println("Connected");
-            sampleClient.setCallback(this);
+            this.sampleClient.setCallback(this);
             System.out.println("Publishing message: "+content);
             MqttMessage message = new MqttMessage(content.getBytes());
             message.setQos(qos);
-            sampleClient.subscribe("hello/world");
-            sampleClient.publish(topic, message);
+            this.sampleClient.subscribe("hello/world");
+            this.sampleClient.publish(topic, message);
             System.out.println("Message published");
             //sampleClient.disconnect();
             //System.out.println("Disconnected");
